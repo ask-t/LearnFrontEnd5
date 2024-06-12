@@ -1,12 +1,13 @@
+'use client'
 import React from 'react';
-import { redirect } from "next/navigation";
+import { useRouter } from 'next/navigation'
 import authService from '../services/authService'; // Your authentication service
 
 function LogoutButton() {
-
+  const router = useRouter();
   const handleLogout = () => {
     authService.logout(); // Assuming this clears the local storage or any auth tokens
-    redirect('/login'); // Redirect to login page after logout
+    router.push('/login'); // Redirect to login page after logout
   };
 
   return (

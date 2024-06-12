@@ -1,26 +1,33 @@
 'use client'
 import React, { useState } from 'react';
-import { redirect } from "next/navigation";
+import { useRouter } from 'next/navigation'
 import authService from '../services/authService';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const router = useRouter();
 
   const handleLogin = async (event: any) => {
     event.preventDefault();
     try {
       const response = await authService.login({ email, password });
-      localStorage.setItem('user', JSON.stringify(response.data));
-      redirect('/dashboard'); // Redirect to a protected route
-    } catch (error: any) {
-      console.error('Login error', error.response.data);
-      // Handle errors (e.g., display error messages)
+      if (response.success) {
+        console.log("success");
+        router.push("/");
+      } else {
+        setErrorMsg('Invalid credentials or server error'); // Handle unsuccessful login
+      }
+    } catch (error) {
+      console.error('Login error', error);
+      setErrorMsg('Login failed. Please try again.');
     }
   };
 
   return (
     <form onSubmit={handleLogin} className="space-y-4 max-w-sm mx-auto">
+      {errorMsg && <p className="text-red-500">{errorMsg}</p>}
       <input
         type="email"
         value={email}
@@ -45,7 +52,6 @@ function LoginForm() {
       </button>
     </form>
   );
-
 }
 
 export default LoginForm;

@@ -1,24 +1,27 @@
 'use client'
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import React from 'react';
-import { redirect } from "next/navigation";
+import { usePathname, useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 import classnames from 'classnames';
 import { useTheme } from "next-themes"
 
 const NavBar = () => {
   const currentPath = usePathname();
   const { setTheme } = useTheme();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+
+  // This effect runs only once on component mount, which only happens on the client-side
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem('user'));
+  }, [router]);
 
   // Function to handle logout
-  const handleLogout = () => {
-    // Assuming authService.logOut() clears the user data from local storage
-    localStorage.removeItem('user'); // Example of manually removing the user
-    redirect('/login'); // Redirect to login page
+  const handleLogout = (e: any) => {
+    e.preventDefault(); // Prevent default Link behavior
+    localStorage.removeItem('user'); // Manually remove the user
+    router.push('/auth/login'); // Redirect to login page
   };
-
-  // Check if user is logged in
-  const isLoggedIn = !!localStorage.getItem('user');
 
   const links = [
     { label: "Home", href: '/' },
@@ -26,29 +29,26 @@ const NavBar = () => {
     // Conditional rendering based on user's authentication state
     ...(isLoggedIn ? [
       { label: "Sign Out", href: '/', onClick: handleLogout },
+      {label: "info", href: "/auth/userinfo"},
     ] : [
       { label: "Login", href: '/auth/login' },
       { label: "Sign Up", href: '/auth/signup' },
     ])
   ];
 
-  console.log(`This is the current path: ${currentPath}`);
-
   return (
     <div>
       <nav className='flex space-x-6 border-b mb-5 px-5 h-14 items-center text-black dark:bg-black dark:text-white'>
-        <Link href='/' className='font-bold text-2xl'>Your Quote</Link>
+        <Link href='/' passHref><span className='font-bold text-2xl cursor-pointer'>Your Quote</span></Link>
         <ul className='flex space-x-6'>
           {links.map((link) => (
             <li key={link.href} className={classnames({ 'text-cyan-700 font-bold': link.href === currentPath, 'text-zinc-900 dark:text-white': link.href !== currentPath })}>
-              {link.onClick ? (
-                <a href={link.href} onClick={(e) => {
-                  e.preventDefault();
-                  link.onClick();
-                }}>{link.label}</a>
-              ) : (
-                <Link href={link.href}>{link.label}</Link>
-              )}
+              <Link href={link.href} passHref>
+                <span className={classnames('cursor-pointer', { 'text-cyan-700 font-bold': link.href === currentPath, 'text-zinc-900 dark:text-white': link.href !== currentPath })}
+                  onClick={link.onClick ? (e) => link.onClick(e) : undefined}>
+                  {link.label}
+                </span>
+              </Link>
             </li>
           ))}
         </ul>

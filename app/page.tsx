@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import QuoteCard from "./components/QuoteCard";
 

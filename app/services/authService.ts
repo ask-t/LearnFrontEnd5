@@ -13,17 +13,26 @@ function signUP(user: any){
     .then(data => data);
 }
 
-function login(user: any){
-    return fetch(`${API_URL}/auth/sign-in`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-    })
-    .then(response => response.json())
-    .then(data => data);
-}
+const login = async ({ email, password }: { email: string, password: string }) => {
+    try {
+        const response = await fetch('http://localhost:8080/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
+        const data = await response.json();
+        if (data.success && typeof window !== 'undefined') {
+            localStorage.setItem('user', JSON.stringify(data.token));
+            console.log('User logged in:', data);
+            return data;
+        }
+    } catch (error) {
+        console.error('Authentication failed:', error);
+    }
+    return null;
+};
 
 function logout(){
     return fetch(`${API_URL}/auth/logout`, {
@@ -36,10 +45,11 @@ function logout(){
     .then(data => data);
 }
 
+
 const authService = {
     signUP,
     login,
-    logout
+    logout,
 };
 
 export default authService;
