@@ -1,48 +1,31 @@
 'use client'
-import React from "react";
+import React, { useEffect, useState } from "react";
 import QuoteCard from "./components/QuoteCard";
+import {Quote} from "./models/Quote"
+import {QuoteService} from './services/quoteService';
+
 
 export default function Home() {
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  const quotes = [
-    {
-      "_id": "666939747bc68f5491945e5e",
-      "content": "Innovation is the ability to see change as an opportunity – not a threat.",
-      "category": "general",
-      "author": "Steve Jobs",
-      "userid": "johndoe123",
-      "likes": [],
-      "__v": 0
-    },
-    {
-      "_id": "666939917bc68f5491945e61",
-      "content": "The only way to do great work is to love what you do.",
-      "category": "general",
-      "author": "Steve Jobs",
-      "userid": "johndoe123",
-      "likes": [],
-      "__v": 0
-    },
-    {
-      "_id": "666939997bc68f5491945e64",
-      "content": "Your time is limited, don't waste it living someone else's life.",
-      "category": "general",
-      "author": "Steve Jobs",
-      "userid": "johndoe123",
-      "likes": [],
-      "__v": 0
-    },
-    {
-      "_id": "666939a37bc68f5491945e67",
-      "content": "Being the richest man in the cemetery doesn't matter to me. Going to bed at night saying we've done something wonderful, that's what matters to me.",
-      "category": "general",
-      "author": "Steve Jobs",
-      "userid": "johndoe123",
-      "likes": [],
-      "__v": 0
-    }
-    // Add more quote objects here as needed
-  ];
+  useEffect(() => {
+    // Function to fetch quotes from the API
+    const fetchQuotes = async () => {
+      try{
+        const data: Quote[] = await QuoteService.getQuotes();
+        setQuotes(data);
+      }
+      catch{
+        setError('Failed to fetch quotes');
+      }
+    };
+
+    fetchQuotes(); // Call the fetch function
+  }, []); // Empty dependency array ensures this runs only once after the component mounts
+if(error){
+  return (<div>{error}</div>)
+}
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 text-black">
       <div className="flex flex-wrap justify-center">
