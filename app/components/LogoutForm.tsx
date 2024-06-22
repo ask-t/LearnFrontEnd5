@@ -7,7 +7,7 @@ function LogoutButton() {
   const router = useRouter();
   const handleLogout = () => {
     authService.logout(); // Assuming this clears the local storage or any auth tokens
-    router.push('/login'); // Redirect to login page after logout
+    location.replace('/');
   };
 
   return (

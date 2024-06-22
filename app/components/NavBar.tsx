@@ -3,11 +3,9 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import classnames from 'classnames';
-import { useTheme } from "next-themes"
 
 const NavBar = () => {
   const currentPath = usePathname();
-  const { setTheme } = useTheme();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
 
@@ -20,12 +18,11 @@ const NavBar = () => {
   const handleLogout = (e: any) => {
     e.preventDefault(); // Prevent default Link behavior
     localStorage.removeItem('user'); // Manually remove the user
-    router.push('/auth/login'); // Redirect to login page
+    location.reload(); // Redirect to login page
   };
 
   const links = [
     { label: "Home", href: '/' },
-    { label: "History", href: '/history' },
     // Conditional rendering based on user's authentication state
     ...(isLoggedIn ? [
       { label: "Sign Out", href: '/', onClick: handleLogout },

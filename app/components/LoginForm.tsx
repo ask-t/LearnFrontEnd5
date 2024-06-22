@@ -7,7 +7,6 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-  const router = useRouter();
 
   const handleLogin = async (event: any) => {
     event.preventDefault();
@@ -15,7 +14,7 @@ function LoginForm() {
       const response = await authService.login({ email, password });
       if (response.success) {
         console.log("success");
-        router.push("/");
+        location.replace('/');
       } else {
         setErrorMsg('Invalid credentials or server error'); // Handle unsuccessful login
       }

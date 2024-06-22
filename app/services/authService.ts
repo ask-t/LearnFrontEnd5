@@ -24,7 +24,10 @@ const login = async ({ email, password }: { email: string, password: string }) =
         });
         const data = await response.json();
         if (data.success && typeof window !== 'undefined') {
-            localStorage.setItem('user', JSON.stringify(data.token));
+            const user = JSON.stringify(data.token);
+            const userid = JSON.stringify(data.userid);
+            localStorage.setItem('user', JSON.parse(user));
+            localStorage.setItem('userid', JSON.parse(userid));
             console.log('User logged in:', data);
             return data;
         }

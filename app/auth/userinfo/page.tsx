@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 
 function UserInfoPage() {
-  const [user, setUser] = useState<{ email: string; role: string } | null>(null);
+  const [user, setUser] = useState<{ userid: string, email: string; role: string } | null>(null);
   const router = useRouter();
   useEffect(() => {
     const token = localStorage.getItem('user');
     if (!token) {
-      router.push('/login'); // Redirect to login if no token is found
+      router.push('/auth/login'); // Redirect to login if no token is found
       return;
     }
 
@@ -23,6 +23,7 @@ function UserInfoPage() {
   return (
     <div>
       <h1>User Information</h1>
+      <p>UserID: {user.userid}</p>
       <p>Email: {user.email}</p>
       <p>Role: {user.role}</p>
     </div>
