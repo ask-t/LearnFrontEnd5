@@ -6,7 +6,7 @@ import { Button } from "@nextui-org/button";
 
 const QuoteCard = ({ quote }: {quote: any}) => {
   return (
-    <Card className="max-w-[340px] m-4 shadow-lg">
+    <Card className="max-w-[50rem] m-4 shadow-lg">
       <CardHeader className="justify-between">
         <div className="flex gap-5">
           <div className="flex flex-col gap-1 items-start justify-center">
