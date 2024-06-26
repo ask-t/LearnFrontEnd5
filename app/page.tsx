@@ -29,7 +29,7 @@ export default function Home() {
 
   useEffect(() => {
     // Retrieve user ID from local storage
-    const userId = localStorage.getItem('user-id');
+    const userId = localStorage.getItem('userid');
     if (userId) {
       setQuote((prevQuote) => ({ ...prevQuote, userid: userId }));
     }
@@ -106,9 +106,9 @@ export default function Home() {
                 <input
                   type="text"
                   name="userid"
-                  value={localStorage.getItem('userid') || 'please Login'}
+                  value={quote.userid}
+                  onChange={handleInputChange}
                   readOnly
-                  required
                   className="w-full px-3 py-2 border rounded bg-gray-100"
                 />
               </div>

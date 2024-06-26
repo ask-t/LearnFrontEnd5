@@ -13,6 +13,7 @@ function SignUpForm() {
     try {
       const response = await authService.signUP({ name, userid, email, password });
       console.log("Sign up successful", response.data);
+      location.replace('/auth/login');
     }
     catch (error: any) {
       console.error("Sign up error", error.response.data);

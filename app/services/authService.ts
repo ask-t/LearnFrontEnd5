@@ -2,7 +2,7 @@
 const API_URL = 'http://localhost:8080/api';
 
 function signUP(user: any){
-    return fetch(`${API_URL}/auth/sign-up`, {
+    return fetch(`${API_URL}/auth/signup`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
